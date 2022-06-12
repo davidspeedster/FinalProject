@@ -4,7 +4,7 @@ ConfigParser==5.2.0
 coreapi==2.3.3
 coreschema==0.0.4
 cryptography==3.3.2
-ctypes_snappy==1.03
+ctypes-snappy==1.03
 curio==1.5
 cx_Oracle==8.3.0
 Cython==0.29.30
