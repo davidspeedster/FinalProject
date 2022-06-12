@@ -73,4 +73,4 @@ virtualenv==20.14.1
 wincertstore
 winkerberos==0.9.0
 wmi==1.5.1
-xmlrpclib==1.0.1
+xmlrpclib
