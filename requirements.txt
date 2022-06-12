@@ -46,7 +46,7 @@ opencv_python==4.5.5.64
 ordereddict==1.1
 pandas==1.4.2
 Pillow==9.1.1
-protobuf==4.21.1
+protobuf
 psycopg2==2.9.3
 psycopg2_binary==2.9.3
 Pygments==2.12.0
