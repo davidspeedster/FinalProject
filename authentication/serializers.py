@@ -88,6 +88,7 @@ class AdminSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"error": "Password mismatch"})
         user.set_password(password)
         user.role = "admin"
+        user.is_verified = True
         user.save()
         models.RegisteredPersonnel.objects.create(user=user)
         return user
