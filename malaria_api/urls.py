@@ -8,7 +8,7 @@ from django.conf import settings
 app_name = 'malaria_api'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    #     path('admin/', admin.site.urls),
     path('hospital/', views.HospitalList.as_view(), name='create_hospital_list'),
     path('registered_personnel/', views.RegisteredPersonnelList.as_view(),
          name='create_registered_personnel_list'),
@@ -24,8 +24,10 @@ urlpatterns = [
          name='create_hospital_detail_list'),
     path('registered_personnel/<int:pk>', views.RegisteredPersonnelDetail.as_view(),
          name='registered_personnel_detail_list'),
-    path('request_diagnostic/<int:pk>',
-         views.RequestDiagnosticDetail.as_view(), name='create_hospital_list'),
+    path('request_diagnostic/<int:pk>', views.RequestDiagnosticDetail.as_view(),
+         name='request_diagnostic_detail'),
+    path('request_diagnostic/<int:pk>', views.SetDiagnosticResult.as_view(),
+         name='request_diagnostic_detail'),
     path('patient/<int:pk>', views.ReceptionistPatientDetail.as_view(),
          name='create_patient_detail_list'),
     path('patient_checkup/<int:pk>', views.PatientCheckupList.as_view(),
@@ -40,4 +42,4 @@ urlpatterns = [
          name='create_prescription_detail_list'),
     path('doctor_patient_detail/<int:pk>', views.DoctorPatientDetail.as_view(),
          name='create_prescription_detail_list'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -20,7 +20,7 @@ class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Patient
         fields = ['id', 'name', 'phone', 'city', 'sub_city', 'woreda',
-                  'age', ]
+                  'age', 'sex']
 
 
 class PatientCheckupSerializer(serializers.ModelSerializer):

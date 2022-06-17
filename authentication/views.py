@@ -1,9 +1,12 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, request
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from . import serializers
 import coreapi
 from .custom_permissions import isAdmin
 from rest_framework.schemas import AutoSchema
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 
 
 class AuthViewSchema(AutoSchema):
@@ -66,27 +69,21 @@ class AdminSignupView(generics.GenericAPIView):
         })
 
 
-class UserLoginView(generics.GenericAPIView):
-    serializer_class = serializers.UserLoginSerializer
-    permission_classes = (permissions.AllowAny, )
+class UserLoginView(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(
+            data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'role': user.role
+        })
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        valid = serializer.is_valid(raise_exception=True)
 
-        if valid:
-            status_code = status.HTTP_200_OK
-
-            response = {
-                'success': True,
-                'statusCode': status_code,
-                'message': 'User logged in successfully',
-                'access': serializer.data['access'],
-                'refresh': serializer.data['refresh'],
-                'authenticatedUser': {
-                    'email': serializer.data['email'],
-                    'role': serializer.data['role']
-                }
-            }
-
-            return Response(response, status=status_code)
+class LogoutAPIView(APIView):
+    def post(self, request, format=None):
+        request.auth.delete()
+        return Response(status=status.HTTP_200_OK)
