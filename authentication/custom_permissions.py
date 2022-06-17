@@ -1,6 +1,12 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
+class isVerified(BasePermission):
+    def has_permission(self, request, view):
+
+        return bool(request.user.is_verified)
+
+
 class isDoctor(BasePermission):
     def has_permission(self, request, view):
 

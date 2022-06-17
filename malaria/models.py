@@ -3,6 +3,13 @@ from authentication.models import User
 
 
 # Create your models here.
+MALE = "male"
+FEMALE = "female"
+
+SEX = (
+    (MALE, "male"),
+    (FEMALE, "female"),
+)
 
 
 class Hospital(models.Model):
@@ -17,6 +24,10 @@ class Hospital(models.Model):
     isActive = models.BooleanField(default=True)
 
 
+def upload_to(instance, filename):
+    return 'images/{filename}'.format(filename=filename)
+
+
 class RegisteredPersonnel(models.Model):
     user = models.OneToOneField(
         User, related_name="personnel", on_delete=models.CASCADE, default=None)
@@ -26,7 +37,8 @@ class RegisteredPersonnel(models.Model):
     city = models.CharField(max_length=100, default=" ")
     sub_city = models.CharField(max_length=100, default=" ")
     woreda = models.CharField(max_length=10, default=" ")
-    profile_picture = models.ImageField(max_length=300, default=" ")
+    profile_picture = models.ImageField(
+        upload_to=upload_to, blank=True, null=True)
     description = models.TextField(max_length=500, default=" ")
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     isActive = models.BooleanField(default=True)
@@ -36,6 +48,7 @@ class Patient(models.Model):
     name = models.CharField(max_length=200)
     phone = models.CharField(max_length=20)
     city = models.CharField(max_length=100)
+    sex = models.CharField(max_length=20, choices=SEX)
     age = models.IntegerField
     sub_city = models.CharField(max_length=100)
     woreda = models.CharField(max_length=10)
@@ -65,7 +78,7 @@ class PatientCheckup(models.Model):
 
 class RequestDiagnostic(models.Model):
 
-    patient_name = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     result = models.CharField(max_length=100, default="Pending")
     doctor = models.ForeignKey(
         RegisteredPersonnel, on_delete=models.CASCADE, related_name="Doctor")

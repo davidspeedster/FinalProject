@@ -4,6 +4,7 @@ from rest_framework import generics, permissions
 import coreapi
 from rest_framework.schemas import AutoSchema
 from authentication import custom_permissions
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class MalariaViewSchema(AutoSchema):
@@ -45,21 +46,22 @@ class RegisteredPersonnelList(generics.ListAPIView):
         return queryset
 
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isEmployee]
+                          custom_permissions.isEmployee & custom_permissions.isVerified]
 
 
 class RegisteredPersonnelDetail(generics.RetrieveUpdateAPIView):
+    parser_classes = (MultiPartParser, FormParser)
     schema = MalariaViewSchema()
     queryset = models.RegisteredPersonnel.objects.all()
     serializer_class = serializers.RegisteredPersonnelSerializer
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isEmployee & custom_permissions.hasWritePermission]
+                          custom_permissions.isEmployee & custom_permissions.hasWritePermission & custom_permissions.isVerified]
 
 
 class ReceptionistPatientList(generics.ListCreateAPIView):
     schema = MalariaViewSchema()
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isReceptionist & custom_permissions.isOwnerPersonnel]
+                          custom_permissions.isReceptionist & custom_permissions.isOwnerPersonnel & custom_permissions.isVerified]
 
     def get_queryset(self):
         queryset = models.Patient.objects.all()
@@ -73,7 +75,7 @@ class ReceptionistPatientDetail(generics.RetrieveUpdateDestroyAPIView):
     schema = MalariaViewSchema()
 
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isReceptionist & custom_permissions.isOwnerPersonnel]
+                          custom_permissions.isReceptionist & custom_permissions.isOwnerPersonnel & custom_permissions.isVerified]
 
     def get_queryset(self):
         queryset = models.Patient.objects.all()
@@ -88,7 +90,7 @@ class DoctorPatientList(generics.ListAPIView):
     schema = MalariaViewSchema()
 
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isDoctor & custom_permissions.isDoctorOfPatient & custom_permissions.isOwnerPersonnel]
+                          custom_permissions.isDoctor & custom_permissions.isDoctorOfPatient & custom_permissions.isOwnerPersonnel & custom_permissions.isVerified]
 
     def get_queryset(self):
         queryset = models.Patient.objects.all()
@@ -102,7 +104,7 @@ class DoctorPatientDetail(generics.RetrieveUpdateAPIView):
     schema = MalariaViewSchema()
 
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isDoctor & custom_permissions.isDoctorOfPatient & custom_permissions.isOwnerPersonnel]
+                          custom_permissions.isDoctor & custom_permissions.isDoctorOfPatient & custom_permissions.isOwnerPersonnel & custom_permissions.isVerified]
 
     def get_queryset(self):
         queryset = models.Patient.objects.all()
@@ -123,7 +125,7 @@ class PatientCheckupList(generics.RetrieveUpdateAPIView):
 class RequestDiagnosticList(generics.ListCreateAPIView):
     schema = MalariaViewSchema()
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isDoctor]
+                          custom_permissions.isDoctor & custom_permissions.isVerified]
 
     def get_queryset(self):
         queryset = models.RequestDiagnostic.objects.all()
@@ -136,7 +138,7 @@ class RequestDiagnosticList(generics.ListCreateAPIView):
 class RequestDiagnosticDetail(generics.RetrieveUpdateDestroyAPIView):
     schema = MalariaViewSchema()
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isDoctor]
+                          custom_permissions.isDoctor & custom_permissions.isVerified]
 
     def get_queryset(self):
         queryset = models.RequestDiagnostic.objects.all()
@@ -146,10 +148,10 @@ class RequestDiagnosticDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.RequestDiagnosticSerializer
 
 
-class DiagnosticResult(generics.RetrieveUpdateAPIView):
+class SetDiagnosticResult(generics.RetrieveUpdateAPIView):
     schema = MalariaViewSchema()
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isLabTech]
+                          custom_permissions.isLabTech & custom_permissions.isVerified]
 
     def get_queryset(self):
         queryset = models.RequestDiagnostic.objects.all()
@@ -161,7 +163,7 @@ class DiagnosticResult(generics.RetrieveUpdateAPIView):
 
 class PrescriptionList(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isDoctor]
+                          custom_permissions.isDoctor & custom_permissions.isVerified]
     schema = MalariaViewSchema()
 
     def get_queryset(self):
@@ -174,7 +176,7 @@ class PrescriptionList(generics.CreateAPIView):
 
 class PrescriptionDetail(generics.RetrieveDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated &
-                          custom_permissions.isDoctor & custom_permissions.isPrescriptionOfDoctor]
+                          custom_permissions.isDoctor & custom_permissions.isPrescriptionOfDoctor & custom_permissions.isVerified]
     schema = MalariaViewSchema()
 
     def get_queryset(self):
