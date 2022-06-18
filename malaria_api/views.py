@@ -30,7 +30,7 @@ class HospitalList(generics.ListAPIView):
 class HospitalDetail(generics.RetrieveUpdateDestroyAPIView):
     schema = MalariaViewSchema()
     permission_classes = [
-        permissions.IsAuthenticated & custom_permissions.isAdmin]
+        permissions.IsAuthenticated & (custom_permissions.isAdmin | custom_permissions.hasWritePermission)]
     queryset = models.Hospital.objects.all()
     serializer_class = serializers.HospitalSerializer
 

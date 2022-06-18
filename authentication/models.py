@@ -28,27 +28,22 @@ class CustomAccountManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    ADMIN = "admin"
-    HOSPITAL = "hospital"
     DOCTOR = "doctor"
     RECEPTIONIST = "receptionist"
     LAB_TECHNICIAN = "lab_technician"
 
     ROLE_CHOICES = (
-        (ADMIN, "admin"),
-        (HOSPITAL, "hospital"),
         (DOCTOR, "doctor"),
         (RECEPTIONIST, "receptionist"),
         (LAB_TECHNICIAN, "lab_technician"),
     )
     uid = models.UUIDField(unique=True, editable=False,
-                           default=uuid.uuid4, verbose_name='Public identifier')
+                           default=uuid.uuid4, primary_key=True, verbose_name='Public identifier')
     email = models.EmailField(_('email address'), unique=True)
     user_name = models.CharField(max_length=150, unique=True, null=True)
     role = models.CharField(max_length=150, null=True, choices=ROLE_CHOICES)
     start_date = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
-    is_verified = models.BooleanField(default=False)
     objects = CustomAccountManager()
 
     USERNAME_FIELD = 'email'

@@ -44,8 +44,7 @@ class hasWritePermission(BasePermission):
 
         if request.method in SAFE_METHODS:
             return True
-
-        return obj.user == request.user
+        return obj.user_id == request.user.uid
 
 
 class isEmployee(BasePermission):

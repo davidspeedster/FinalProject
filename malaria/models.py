@@ -22,6 +22,8 @@ class Hospital(models.Model):
     phone = models.CharField(max_length=20, default=" ")
     woreda = models.CharField(max_length=10, default=" ")
     isActive = models.BooleanField(default=True)
+    is_verified = models.BooleanField(default=False)
+
 
 
 def upload_to(instance, filename):
@@ -42,6 +44,8 @@ class RegisteredPersonnel(models.Model):
     description = models.TextField(max_length=500, default=" ")
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     isActive = models.BooleanField(default=True)
+    is_verified = models.BooleanField(default=False)
+
 
 
 class Patient(models.Model):
