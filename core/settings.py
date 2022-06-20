@@ -166,7 +166,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(STATIC_URL, 'static')
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10242880
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
