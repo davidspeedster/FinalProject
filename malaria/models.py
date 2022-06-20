@@ -14,7 +14,7 @@ SEX = (
 
 class Hospital(models.Model):
     user = models.OneToOneField(
-        User, related_name="hosptals", on_delete=models.CASCADE, default=None, null=True)
+        User, related_name="hosptals", primary_key=True, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=200, default=" ")
     email = models.EmailField(max_length=100, default=" ")
     city = models.CharField(max_length=100, default=" ")
@@ -25,14 +25,13 @@ class Hospital(models.Model):
     is_verified = models.BooleanField(default=False)
 
 
-
 def upload_to(instance, filename):
     return 'images/{filename}'.format(filename=filename)
 
 
 class RegisteredPersonnel(models.Model):
     user = models.OneToOneField(
-        User, related_name="personnel", on_delete=models.CASCADE, default=None)
+        User, related_name="personnel", primary_key=True, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=200, default=" ")
     email = models.EmailField(max_length=200, default=" ")
     phone = models.CharField(max_length=20, default=" ")
@@ -42,10 +41,9 @@ class RegisteredPersonnel(models.Model):
     profile_picture = models.ImageField(
         upload_to=upload_to, blank=True, null=True)
     description = models.TextField(max_length=500, default=" ")
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
+    hospital = models.UUIDField(default=None, null=True)
     isActive = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
-
 
 
 class Patient(models.Model):
@@ -53,31 +51,14 @@ class Patient(models.Model):
     phone = models.CharField(max_length=20)
     city = models.CharField(max_length=100)
     sex = models.CharField(max_length=20, choices=SEX)
-    age = models.IntegerField
+    age = models.IntegerField(max_length=5)
     sub_city = models.CharField(max_length=100)
     woreda = models.CharField(max_length=10)
-
-
-class PatientCheckup(models.Model):
-    patient = models.OneToOneField(
-        Patient, related_name="patient", on_delete=models.CASCADE, default=None)
     bmi = models.FloatField(max_length=5)
     temperature = models.FloatField(max_length=5)
     blood_pressure = models.FloatField(max_length=5)
-    heart_beat = models.FloatField(max_length=5)
-    fever = models.BooleanField(default=False)
-    chills = models.BooleanField(default=False)
-    headache = models.BooleanField(default=False)
-    nausea = models.BooleanField(default=False)
-    vomiting = models.BooleanField(default=False)
-    diarrhea = models.BooleanField(default=False)
-    abdominal_pain = models.BooleanField(default=False)
-    muscle_pain = models.BooleanField(default=False)
-    joint_pain = models.BooleanField(default=False)
-    rapid_breathing = models.BooleanField(default=False)
-    fatigue = models.BooleanField(default=False)
-    rapid_heart_rate = models.BooleanField(default=False)
-    cough = models.BooleanField(default=False)
+    rbc_count = models.FloatField(max_length=5)
+    doctor = models.UUIDField(default=None, null=True)
 
 
 class RequestDiagnostic(models.Model):

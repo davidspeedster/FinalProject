@@ -1,10 +1,17 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
+from malaria.models import Hospital, RegisteredPersonnel
 
 
-class isVerified(BasePermission):
+class isVerifiedPersonnel(BasePermission):
     def has_permission(self, request, view):
+        obj = RegisteredPersonnel.objects.get(pk=request.user)
+        return bool(obj.is_verified)
 
-        return bool(request.user.is_verified)
+
+class isVerifiedHospital(BasePermission):
+    def has_permission(self, request, view):
+        obj = Hospital.objects.get(pk=request.user)
+        return bool(obj.is_verified)
 
 
 class isDoctor(BasePermission):
@@ -55,7 +62,7 @@ class isEmployee(BasePermission):
         if request.method in SAFE_METHODS:
             return True
 
-        return obj.hospital == request.user
+        return obj.hospital_id == request.user.uid
 
 
 class isOwnerPersonnel(BasePermission):
@@ -66,7 +73,7 @@ class isOwnerPersonnel(BasePermission):
         if request.method in SAFE_METHODS:
             return True
 
-        return obj.hospital == request.hospital
+        return obj.hospital_id == request.hospital
 
 
 class isDoctorOfPatient(BasePermission):
@@ -89,16 +96,3 @@ class isPrescriptionOfDoctor(BasePermission):
             return True
 
         return obj.doctor == request.user
-
-
-class hasChecupListAccess(BasePermission):
-    message = "You do not have permission to override this."
-
-    def has_object_permission(self, request, view, obj):
-
-        if request.method in SAFE_METHODS:
-            return True
-
-        patient = obj.patient
-        doctor = patient.doctor
-        return doctor == request.user

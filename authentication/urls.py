@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import PersonnelSignupView, HospitalSignupView, AdminSignupView, UserLoginView, LogoutAPIView
-
+from .views import PersonnelSignupView, HospitalSignupView, AdminSignupView, UserLoginView, LogoutAPIView, RequestPasswordResetEmail, PasswordTokenCheckAPI, SetNewPasswordAPIView
 app_name = 'authentication'
 
 urlpatterns = [
@@ -12,4 +11,11 @@ urlpatterns = [
          name='register_hospital'),
     path('register_admin/', AdminSignupView.as_view(),
          name='register_admin'),
+    path('request-reset-email/', RequestPasswordResetEmail.as_view(),
+         name="request-reset-email"),
+    path('password-reset/<uidb64>/<token>/',
+         PasswordTokenCheckAPI.as_view(), name='password-reset-confirm'),
+    path('password-reset-complete', SetNewPasswordAPIView.as_view(),
+         name='password-reset-complete')
+
 ]

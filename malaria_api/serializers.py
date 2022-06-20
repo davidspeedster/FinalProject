@@ -5,36 +5,31 @@ from malaria import models
 class HospitalSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Hospital
-        fields = ['id', 'name', 'email', 'phone', 'city',
-                  'sub_city', 'woreda', 'isActive']
+        fields = ['user_id', 'name', 'email', 'phone', 'city',
+                  'sub_city', 'woreda', 'isActive', 'is_verified']
 
 
 class RegisteredPersonnelSerializer(serializers.ModelSerializer):
     class Meta:
+
         model = models.RegisteredPersonnel
-        fields = ['id', 'name', 'email', 'phone', 'city', 'sub_city', 'woreda',
-                  'profile_picture', 'description', 'hospital_id', 'isActive']
+        fields = ['user_id', 'name', 'email', 'phone', 'city', 'sub_city', 'woreda',
+                  'profile_picture', 'description', 'hospital', 'isActive', 'is_verified']
 
 
 class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Patient
         fields = ['id', 'name', 'phone', 'city', 'sub_city', 'woreda',
-                  'age', 'sex']
-
-
-class PatientCheckupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.PatientCheckup
-        fields = ['id', 'patient', 'fever', 'chills', 'headache', 'nausea', 'vomiting', 'diarrhea', 'abdominal_pain', 'muscle_pain', 'joint_pain',
-                  'fatigue', 'rapid_breathing', 'rapid_heart_rate', 'cough',  'bmi', 'blood_pressure', 'temperature']
+                  'age', 'sex', 'rbc_count',
+                  'bmi', 'blood_pressure', 'temperature']
 
 
 class RequestDiagnosticSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RequestDiagnostic
-        fields = ['id', 'patient_name', 'result', 'doctor_name',
-                  'lab_technician_name', 'cell_image', ]
+        fields = ['id', 'patient', 'result', 'doctor',
+                  'lab_technician']
 
 
 class PrescriptionSerializer(serializers.ModelSerializer):
